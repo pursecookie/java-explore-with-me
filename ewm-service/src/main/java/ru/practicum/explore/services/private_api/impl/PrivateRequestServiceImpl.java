@@ -2,6 +2,7 @@ package ru.practicum.explore.services.private_api.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explore.dto.event_request.ParticipationRequestDto;
 import ru.practicum.explore.enums.EventLifecycle;
 import ru.practicum.explore.enums.RequestStatus;
@@ -13,7 +14,7 @@ import ru.practicum.explore.models.User;
 import ru.practicum.explore.repositories.EventRepository;
 import ru.practicum.explore.repositories.EventRequestRepository;
 import ru.practicum.explore.services.private_api.PrivateRequestService;
-import ru.practicum.explore.util.DataFinder;
+import ru.practicum.explore.component.DataFinder;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class PrivateRequestServiceImpl implements PrivateRequestService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public ParticipationRequestDto createRequest(Long requesterId, Long eventId) {
         if (!eventRequestRepository.findUserEventRequestByEvent(requesterId, eventId).isEmpty()) {
@@ -80,6 +82,7 @@ public class PrivateRequestServiceImpl implements PrivateRequestService {
         return EventRequestMapper.mapToParticipationRequestDto(eventRequestRepository.save(request));
     }
 
+    @Transactional
     @Override
     public ParticipationRequestDto cancelRequest(Long userId, Long requestId) {
         EventRequest requestToUpdate = dataFinder.findEventRequestById(requestId);

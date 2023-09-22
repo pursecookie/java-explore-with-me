@@ -4,13 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explore.dto.user.NewUserRequest;
 import ru.practicum.explore.dto.user.UserDto;
 import ru.practicum.explore.mappers.UserMapper;
 import ru.practicum.explore.models.User;
 import ru.practicum.explore.repositories.UserRepository;
 import ru.practicum.explore.services.admin_api.AdminUserService;
-import ru.practicum.explore.util.DataFinder;
+import ru.practicum.explore.component.DataFinder;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,6 +43,7 @@ public class AdminUserServiceImpl implements AdminUserService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public UserDto createUser(NewUserRequest newUserRequest) {
         User user = UserMapper.mapToUser(newUserRequest);

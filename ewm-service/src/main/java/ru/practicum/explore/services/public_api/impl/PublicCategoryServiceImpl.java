@@ -9,7 +9,7 @@ import ru.practicum.explore.mappers.CategoryMapper;
 import ru.practicum.explore.models.Category;
 import ru.practicum.explore.repositories.CategoryRepository;
 import ru.practicum.explore.services.public_api.PublicCategoryService;
-import ru.practicum.explore.util.DataFinder;
+import ru.practicum.explore.component.DataFinder;
 
 import java.util.ArrayList;
 import java.util.Collection;

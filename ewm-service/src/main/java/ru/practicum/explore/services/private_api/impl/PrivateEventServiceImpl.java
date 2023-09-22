@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explore.dto.event.EventFullDto;
 import ru.practicum.explore.dto.event.EventShortDto;
 import ru.practicum.explore.dto.event.NewEventDto;
@@ -23,7 +24,7 @@ import ru.practicum.explore.repositories.EventRepository;
 import ru.practicum.explore.repositories.EventRequestRepository;
 import ru.practicum.explore.repositories.LocationRepository;
 import ru.practicum.explore.services.private_api.PrivateEventService;
-import ru.practicum.explore.util.DataFinder;
+import ru.practicum.explore.component.DataFinder;
 import ru.practicum.explore.util.UtilMergeProperty;
 
 import java.time.LocalDateTime;
@@ -52,6 +53,7 @@ public class PrivateEventServiceImpl implements PrivateEventService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public EventFullDto createEvent(Long initiatorId, NewEventDto newEventDto) {
         LocalDateTime eventDate = newEventDto.getEventDate();
@@ -77,6 +79,7 @@ public class PrivateEventServiceImpl implements PrivateEventService {
         return EventMapper.mapToEventFullDto(event);
     }
 
+    @Transactional
     @Override
     public EventFullDto updateEvent(Long initiatorId, Long eventId, UpdateEventUserRequest updateEventUserRequest) {
         Event eventToUpdate = dataFinder.findEventById(eventId);
@@ -119,6 +122,7 @@ public class PrivateEventServiceImpl implements PrivateEventService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public EventRequestStatusUpdateResult updateRequestStatus(Long initiatorId, Long eventId,
                                                               EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest) {

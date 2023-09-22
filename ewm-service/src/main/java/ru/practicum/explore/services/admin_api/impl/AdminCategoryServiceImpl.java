@@ -2,6 +2,7 @@ package ru.practicum.explore.services.admin_api.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explore.dto.category.CategoryDto;
 import ru.practicum.explore.dto.category.NewCategoryDto;
 import ru.practicum.explore.exceptions.ConditionMismatchException;
@@ -11,7 +12,7 @@ import ru.practicum.explore.models.Event;
 import ru.practicum.explore.repositories.CategoryRepository;
 import ru.practicum.explore.repositories.EventRepository;
 import ru.practicum.explore.services.admin_api.AdminCategoryService;
-import ru.practicum.explore.util.DataFinder;
+import ru.practicum.explore.component.DataFinder;
 import ru.practicum.explore.util.UtilMergeProperty;
 
 import java.util.Collection;
@@ -23,6 +24,7 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
     private final EventRepository eventRepository;
     private final DataFinder dataFinder;
 
+    @Transactional
     @Override
     public CategoryDto createCategory(NewCategoryDto newCategoryDto) {
         Category category = CategoryMapper.mapToCategory(newCategoryDto);
@@ -43,6 +45,7 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
         categoryRepository.deleteById(catId);
     }
 
+    @Transactional
     @Override
     public CategoryDto updateCategory(Long catId, CategoryDto categoryDto) {
         Category categoryToUpdate = dataFinder.findCategoryById(catId);

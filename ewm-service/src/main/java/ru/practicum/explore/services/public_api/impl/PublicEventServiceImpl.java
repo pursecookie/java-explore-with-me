@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.practicum.explore.StatsClient;
+import ru.practicum.explore.component.DataFinder;
+import ru.practicum.explore.dto.ReadEventsParams;
 import ru.practicum.explore.dto.event.EventFullDto;
 import ru.practicum.explore.dto.event.EventShortDto;
 import ru.practicum.explore.enums.EventLifecycle;
@@ -15,7 +17,6 @@ import ru.practicum.explore.models.Event;
 import ru.practicum.explore.models.ViewStats;
 import ru.practicum.explore.repositories.EventRepository;
 import ru.practicum.explore.services.public_api.PublicEventService;
-import ru.practicum.explore.util.DataFinder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -34,25 +35,23 @@ public class PublicEventServiceImpl implements PublicEventService {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Override
-    public Collection<EventShortDto> readAllEvents(String text,
-                                                   List<Long> categories,
-                                                   Boolean paid,
-                                                   LocalDateTime rangeStart,
-                                                   LocalDateTime rangeEnd,
-                                                   Boolean onlyAvailable,
-                                                   Pageable pageable,
-                                                   String ip,
-                                                   String uri) {
-        if (rangeStart != null && rangeEnd != null) {
-            if (rangeStart.isAfter(rangeEnd)) {
+    public Collection<EventShortDto> readAllEvents(ReadEventsParams params, Pageable pageable) {
+        if (params.getRangeStart() != null && params.getRangeEnd() != null) {
+            if (params.getRangeStart().isAfter(params.getRangeEnd())) {
                 throw new InvalidRequestException("The dates of the range are specified incorrectly");
             }
         }
 
-        Collection<Event> events = eventRepository.findEventsByUserParameters(text, categories, paid, rangeStart,
-                rangeEnd, pageable).getContent();
+        Collection<Event> events = eventRepository.findEventsByUserParameters(
+                params.getText(),
+                params.getCategories(),
+                params.getPaid(),
+                params.getRangeStart(),
+                params.getRangeEnd(),
+                pageable
+        ).getContent();
 
-        if (onlyAvailable) {
+        if (params.getOnlyAvailable()) {
             events = events.stream()
                     .filter(event -> event.getConfirmedRequests() < event.getParticipantLimit())
                     .collect(Collectors.toList());
@@ -62,7 +61,9 @@ public class PublicEventServiceImpl implements PublicEventService {
             return new ArrayList<>();
         }
 
-        statsClient.create(new EndpointHit("ewm-main-service", uri, ip,
+        statsClient.create(new EndpointHit("ewm-main-service",
+                params.getRequest().getRequestURI(),
+                params.getRequest().getRemoteAddr(),
                 LocalDateTime.now().format(formatter)));
 
         return events.stream()

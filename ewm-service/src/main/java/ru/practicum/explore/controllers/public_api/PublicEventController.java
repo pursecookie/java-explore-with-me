@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.explore.dto.ReadEventsParams;
 import ru.practicum.explore.dto.event.EventFullDto;
 import ru.practicum.explore.dto.event.EventShortDto;
 import ru.practicum.explore.exceptions.InvalidRequestException;
@@ -51,8 +52,8 @@ public class PublicEventController {
             }
         }
 
-        return publicEventService.readAllEvents(text, categories, paid, rangeStart, rangeEnd,
-                onlyAvailable, pageable, request.getRemoteAddr(), request.getRequestURI());
+        return publicEventService.readAllEvents(new ReadEventsParams(text, categories, paid, rangeStart,
+                rangeEnd, onlyAvailable, request), pageable);
     }
 
     @GetMapping("/{eventId}")

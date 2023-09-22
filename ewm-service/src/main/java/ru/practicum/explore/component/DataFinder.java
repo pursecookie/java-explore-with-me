@@ -1,12 +1,12 @@
-package ru.practicum.explore.util;
+package ru.practicum.explore.component;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import ru.practicum.explore.exceptions.NotFoundException;
 import ru.practicum.explore.models.*;
 import ru.practicum.explore.repositories.*;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class DataFinder {
     private final CategoryRepository categoryRepository;

@@ -8,7 +8,7 @@ import ru.practicum.explore.mappers.CompilationMapper;
 import ru.practicum.explore.models.Compilation;
 import ru.practicum.explore.repositories.CompilationRepository;
 import ru.practicum.explore.services.public_api.PublicCompilationService;
-import ru.practicum.explore.util.DataFinder;
+import ru.practicum.explore.component.DataFinder;
 
 import java.util.ArrayList;
 import java.util.Collection;

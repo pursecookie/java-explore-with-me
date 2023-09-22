@@ -2,6 +2,7 @@ package ru.practicum.explore.services.admin_api.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explore.dto.compilation.CompilationDto;
 import ru.practicum.explore.dto.compilation.NewCompilationDto;
 import ru.practicum.explore.dto.compilation.UpdateCompilationRequest;
@@ -11,7 +12,7 @@ import ru.practicum.explore.models.Event;
 import ru.practicum.explore.repositories.CompilationRepository;
 import ru.practicum.explore.repositories.EventRepository;
 import ru.practicum.explore.services.admin_api.AdminCompilationService;
-import ru.practicum.explore.util.DataFinder;
+import ru.practicum.explore.component.DataFinder;
 import ru.practicum.explore.util.UtilMergeProperty;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
     private final EventRepository eventRepository;
     private final DataFinder dataFinder;
 
+    @Transactional
     @Override
     public CompilationDto createCompilation(NewCompilationDto newCompilationDto) {
         Compilation compilation = CompilationMapper.mapToCompilation(newCompilationDto);
@@ -39,6 +41,7 @@ public class AdminCompilationServiceImpl implements AdminCompilationService {
         compilationRepository.deleteById(compId);
     }
 
+    @Transactional
     @Override
     public CompilationDto updateCompilation(Long compId, UpdateCompilationRequest updateCompilationRequest) {
         Compilation compilationToUpdate = dataFinder.findCompilationById(compId);

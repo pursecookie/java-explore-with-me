@@ -3,6 +3,7 @@ package ru.practicum.explore.services.admin_api.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explore.dto.event.EventFullDto;
 import ru.practicum.explore.dto.event.UpdateEventAdminRequest;
 import ru.practicum.explore.enums.AdminEventState;
@@ -15,7 +16,7 @@ import ru.practicum.explore.models.Location;
 import ru.practicum.explore.repositories.EventRepository;
 import ru.practicum.explore.repositories.LocationRepository;
 import ru.practicum.explore.services.admin_api.AdminEventService;
-import ru.practicum.explore.util.DataFinder;
+import ru.practicum.explore.component.DataFinder;
 import ru.practicum.explore.util.UtilMergeProperty;
 
 import java.time.LocalDateTime;
@@ -51,6 +52,7 @@ public class AdminEventServiceImpl implements AdminEventService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public EventFullDto updateEvent(Long eventId, UpdateEventAdminRequest updateEventAdminRequest) {
         Event eventToUpdate = dataFinder.findEventById(eventId);
