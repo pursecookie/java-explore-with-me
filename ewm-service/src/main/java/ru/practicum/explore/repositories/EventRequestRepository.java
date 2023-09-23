@@ -17,4 +17,9 @@ public interface EventRequestRepository extends JpaRepository<EventRequest, Long
     Collection<EventRequest> findAllByRequester_Id(Long userId);
 
     Collection<EventRequest> findAllByEvent_Id(Long eventId);
+
+    @Query("SELECT er FROM EventRequest er " +
+            "WHERE er.requester.id = ?1 " +
+            "AND er.status = 'CONFIRMED'")
+    Collection<EventRequest> findConfirmedUserRequests(Collection<Long> friends);
 }
