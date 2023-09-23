@@ -150,12 +150,12 @@
 					"variable": [
 						{
 							"key": "userId",
-							"value": "1",
+							"value": "{{uid}}",
 							"description": "(Required)"
 						},
 						{
 							"key": "friendId",
-							"value": "2",
+							"value": "{{fid}}",
 							"description": "(Required) "
 						}
 					]
@@ -204,7 +204,7 @@
 					"variable": [
 						{
 							"key": "userId",
-							"value": "1",
+							"value": "{{uid}}",
 							"description": "(Required) "
 						},
 						{
@@ -255,12 +255,12 @@
 					"variable": [
 						{
 							"key": "userId",
-							"value": "2",
+							"value": "{{fid}}",
 							"description": "(Required)"
 						},
 						{
 							"key": "friendId",
-							"value": "1",
+							"value": "{{uid}}",
 							"description": "(Required) "
 						}
 					]
@@ -310,7 +310,7 @@
 					"variable": [
 						{
 							"key": "userId",
-							"value": "1",
+							"value": "{{uid}}",
 							"description": "(Required) "
 						}
 					]
@@ -430,7 +430,7 @@
 					"variable": [
 						{
 							"key": "userId",
-							"value": "1"
+							"value": "{{uid}}"
 						}
 					]
 				}
@@ -482,7 +482,7 @@
 					"variable": [
 						{
 							"key": "eventId",
-							"value": "1"
+							"value": "{{eid}}"
 						}
 					]
 				}
@@ -519,7 +519,7 @@
 					}
 				],
 				"url": {
-					"raw": "{{baseUrl}}/users/:userId/requests?eventId=1",
+					"raw": "{{baseUrl}}/users/:userId/requests?eventId={{eid}}",
 					"host": [
 						"{{baseUrl}}"
 					],
@@ -531,13 +531,13 @@
 					"query": [
 						{
 							"key": "eventId",
-							"value": "1"
+							"value": "{{eid}}"
 						}
 					],
 					"variable": [
 						{
 							"key": "userId",
-							"value": "2"
+							"value": "{{fid}}"
 						}
 					]
 				}
@@ -588,7 +588,7 @@
 					"variable": [
 						{
 							"key": "userId",
-							"value": "1"
+							"value": "{{uid}}"
 						}
 					]
 				}
@@ -632,12 +632,12 @@
 					"variable": [
 						{
 							"key": "id",
-							"value": "1",
+							"value": "{{uid}}",
 							"description": "(Required) "
 						},
 						{
 							"key": "friendId",
-							"value": "2",
+							"value": "{{fid}}",
 							"description": "(Required) "
 						}
 					]
@@ -670,6 +670,18 @@
 		{
 			"key": "baseUrl",
 			"value": "http://localhost:8080"
+		},
+		{
+			"key": "uid",
+			"value": "1"
+		},
+		{
+			"key": "fid",
+			"value": "2"
+		},
+		{
+			"key": "eid",
+			"value": "1"
 		}
 	]
 }
