@@ -6,10 +6,12 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explore.component.DataFinder;
 import ru.practicum.explore.dto.event.EventShortDto;
 import ru.practicum.explore.dto.event_request.ParticipationRequestDto;
+import ru.practicum.explore.dto.friendship.FriendshipDto;
 import ru.practicum.explore.dto.user.FriendsEventsDto;
 import ru.practicum.explore.dto.user.UserShortDto;
 import ru.practicum.explore.mappers.EventMapper;
 import ru.practicum.explore.mappers.EventRequestMapper;
+import ru.practicum.explore.mappers.FriendshipMapper;
 import ru.practicum.explore.mappers.UserMapper;
 import ru.practicum.explore.models.Friendship;
 import ru.practicum.explore.models.User;
@@ -34,19 +36,22 @@ public class PrivateFriendshipServiceImpl implements PrivateFriendshipService {
 
     @Transactional
     @Override
-    public void addFriend(Long userId, Long friendId) {
+    public FriendshipDto addFriend(Long userId, Long friendId) {
         User user = dataFinder.findUserById(userId);
         User friend = dataFinder.findUserById(friendId);
 
-        Friendship friendship = friendshipRepository.findByUserIdAndFriendId(friendId, userId);
+        Friendship request = friendshipRepository.findByUserIdAndFriendId(friendId, userId);
+        boolean friendshipStat = false;
 
-        if (friendship == null) {
-            friendshipRepository.save(new Friendship(user, friend, false));
-        } else {
-            friendship.setFriendshipStat(true);
-            friendshipRepository.save(friendship);
-            friendshipRepository.save(new Friendship(user, friend, true));
+        if (request != null) {
+            friendshipStat = true;
+            request.setFriendshipStat(friendshipStat);
+            friendshipRepository.save(request);
         }
+
+        Friendship newFriendship = friendshipRepository.save(new Friendship(user, friend, friendshipStat));
+
+        return FriendshipMapper.mapToFriendshipDto(newFriendship);
     }
 
     @Transactional
@@ -59,13 +64,11 @@ public class PrivateFriendshipServiceImpl implements PrivateFriendshipService {
         Friendship friendship2 = friendshipRepository.findByUserIdAndFriendId(friendId, userId);
 
         if (friendship1 != null) {
-            friendship1.setFriendshipStat(false);
-            friendshipRepository.save(friendship1);
+            friendshipRepository.deleteById(friendship1.getId());
         }
 
         if (friendship2 != null) {
-            friendship2.setFriendshipStat(false);
-            friendshipRepository.save(friendship2);
+            friendshipRepository.deleteById(friendship2.getId());
         }
     }
 
